@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scan to Pay</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f6fb; }
+        .payment-container { max-width: 400px; margin: 60px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 32px 24px; text-align: center; }
+        img { width: 200px; margin: 24px 0; }
+        button { margin-top: 24px; padding: 10px 24px; background: #4f8ef7; color: #fff; border-radius: 6px; border: none; font-weight: 500; cursor: pointer; }
+        button:hover { background: #357ae8; }
+
+        h2{
+            background-color: gray;
+            color: red;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <h3> Pay for <%= carName %></h3>
+        <!-- Add this inside your payment-container div -->
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    document.getElementById('rzp-button').onclick = function(e){
+        e.preventDefault();
+        fetch('/create-order', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ amount: 100 }) // 100 paise = ₹1
+        })
+        .then(res => res.json())
+        .then(order => {
+            var options = {
+                "key": "YOUR_KEY_ID",
+                "amount": order.amount,
+                "currency": "INR",
+                "name": "Rentify",
+                "description": "Car Booking Payment",
+                "order_id": order.id,
+                "handler": function (response){
+                    alert("Payment successfully!");
+                    window.location.href = "/profile?message=Payment successfully!";
+                }
+            };
+            var rzp1 = new Razorpay(options);
+            rzp1.open();
+        });
+    }
+</script>
+        <!-- <img src="/qr_scanner.jpg" alt="Scan QR to pay" /> -->
+         <h2>cash</h2>
+         <h2>Online</h2>
+        <p>Scan the QR code above to complete your payment and confirm your booking.</p>
+        <form action="/profile" method="GET">
+            <input type="hidden" name="message" value="Payment successfully!">
+            <button type="submit">I have paid</button>
+        </form>
+    </div>
+</body>
+</html>

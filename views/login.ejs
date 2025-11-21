@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <!-- <link rel="stylesheet" href="login.css"> -->
+   <style>
+    body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to right, #6dd5ed, #2193b0);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('BMW.jpeg');
+  /* background-image: url('subscribe.png'); */
+  background-size: cover;
+   background-repeat: no-repeat;
+  background-position: center;
+padding-bottom: 20px;
+}
+.login-container {
+ 
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 5px 5px 10px  5px rgba(211, 26, 26, 0.4);
+  width: 300px;
+  text-align: center;
+  background-image: url('scerpion1.png') no-repeat center center/cover;
+  background-size: cover;
+  /* background-position: center; */
+ background-repeat: no-repeat;
+   
+}
+
+.login-container h2 {
+  margin-bottom: 20px;
+}
+.login-container input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+.login-container button {
+  width: 100%;
+  padding: 10px;
+  background-color: #9bd7e7;
+  color: white;
+  border: none;
+  border-radius: 60px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.login-container button:hover {
+  background-color: #19748a;
+}
+
+.login-container p {
+  margin-top: 15px;
+}
+
+    
+.forget{
+    margin-top: 9px;
+  
+}
+
+
+   </style>
+</head>
+<body>
+  <form action="/users/login" method="post">
+  <div class="login-container">
+    <h2>LOGIN</h2>
+    
+        <!-- <h5>enter your name</h5> -->
+      <input type="text" placeholder="Username" name="username" required>
+      <!-- <h5>enter your password</h5> -->
+      <input type="password" placeholder="Password" name="password" required>
+      <button type="submit" class="forget">Login</button>
+      <button type="submit" class="forget"> <a href="forget.html"></a>Forget password</a></button>
+      <!-- <button></button> -->
+      
+  </form>
+  <% if (typeof message !== 'undefined' && message) { %>
+      <script>
+        alert("<%= message %>");
+      </script>
+    <% } %>
+    <p>Don't have an account? <a href="/signup">Sign up</a></p>
+  </div>
+</body>
+</html>
