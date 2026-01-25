@@ -25,7 +25,7 @@ app.use(session({
     secret: 'secretKey',
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: 'mongodb://127.0.0.1:27017/carwebsite' })
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
 }));
 
 //passport middleware
