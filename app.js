@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
@@ -11,6 +12,11 @@ require('./config/passport')(passport);
 const MongoStore = require('connect-mongo');
 const loginModel = require('./models/loginModel'); // Assuming you have a login model
 const bookingRoutes = require('./routes/booking.routes');
+const connectDB = require("./config/dbfrom"); // path as per your project
+connectDB();
+
+
+console.log("MONGO_URI =", process.env.MONGO_URI);
 
 
 
@@ -186,6 +192,6 @@ app.post('/get-from-data', (req, res) => {
     res.send('data received');
 });
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+app.listen(process.env.PORT, () => {
+    console.log('Server is running on port 3000 http://localhost:3000' );
 });
