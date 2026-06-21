@@ -9,7 +9,7 @@ const session = require('express-session');
 const expressLayouts = require('express-ejs-layouts');
 const passport = require('passport');
 require('./config/passport')(passport);
-const MongoStore = require('connect-mongo');
+const MongoStore = require('connect-mongo').default;
 const loginModel = require('./models/loginModel'); // Assuming you have a login model
 const bookingRoutes = require('./routes/booking.routes');
 const connectDB = require("./config/dbfrom"); // path as per your project
@@ -125,26 +125,91 @@ app.get('/profile', ensureAuthenticated, async (req, res) => {
 
 
 //pass booking car
+
 app.get('/book', ensureAuthenticated, (req, res) => {
+
     const carName = req.query.carName;
-    res.render('booking', { user: req.user, carName });
+    const pricePerDay = req.query.price;
+
+    console.log("Car =", carName);
+    console.log("Price =", pricePerDay);
+
+    res.render('booking', {
+        user: req.user,
+        carName,
+        pricePerDay
+    });
+
 });
+
+
 //Booking detail routes
 const bookingModel = require('./models/booking');
-app.post('/book', ensureAuthenticated, async (req, res) => {
-    const { carName, deliveryType, pickingDate, droppingDate } = req.body;
-    // Check if car is already booked for the selected dates (optional)
-    await bookingModel.create({
+app.post("/payment", ensureAuthenticated, async (req, res) => {
+
+    const {
         carName,
-        userId: req.user._id,
         deliveryType,
+        deliveryAddress,
         pickingDate,
         droppingDate,
-        status: 'pending'
+        pricePerDay,
+        totalAmount
+    } = req.body;
+
+    // Save booking to MongoDB
+    await bookingModel.create({
+
+        carName,
+        userId: req.user._id,
+
+        deliveryType,
+        deliveryAddress,
+
+        pickingDate,
+        droppingDate,
+
+        pricePerDay,
+        totalAmount,
+
+        status: "Booked"
+
     });
-    res.redirect('/payment?carName=' + encodeURIComponent(carName));
+
+    res.render("payment", {
+
+        user: req.user,
+
+        carName,
+        deliveryType,
+        deliveryAddress,
+
+        pickingDate,
+        droppingDate,
+
+        pricePerDay,
+        totalAmount
+
+    });
+
 });
-// cancel ride
+//payment method
+
+app.post("/payment",(req,res)=>{
+
+res.render("payment",{
+
+carName:req.body.carName,
+deliveryType:req.body.deliveryType,
+deliveryAddress:req.body.deliveryAddress,
+pickingDate:req.body.pickingDate,
+droppingDate:req.body.droppingDate,
+pricePerDay:req.body.pricePerDay,
+totalAmount:req.body.totalAmount
+
+});
+
+});
 
 
 

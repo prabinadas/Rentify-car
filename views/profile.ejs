@@ -1,181 +1,299 @@
+```ejs
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: #f4f6fb;
-            margin: 0;
-            padding: 0;
-        }
-        .profile-container {
-            max-width: 400px;
-            margin: 60px auto;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            padding: 32px 24px;
-            text-align: center;
-        }
-        .profile-icon {
-            font-size: 64px;
-            color: #4f8ef7;
-            margin-bottom: 16px;
-        }
-        h1 {
-            margin: 0 0 12px 0;
-            font-size: 2em;
-            color: #333;
-        }
-        p {
-            color: #555;
-            margin: 8px 0;
-        }
-        .bookings-list {
-            margin-top: 32px;
-            text-align: left;
-        }
-        .bookings-list h2 {
-            color: #4f8ef7;
-            font-size: 1.2em;
-            margin-bottom: 12px;
-        }
-        .bookings-list ul {
-            list-style: none;
-            padding: 0;
-        }
-        .bookings-list li {
-            background: #f4f6fb;
-            margin-bottom: 10px;
-            padding: 12px;
-            border-radius: 8px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-        }
-        .status {
-            font-weight: bold;
-            color: #357ae8;
-        }
-        a {
-            display: inline-block;
-            margin-top: 24px;
-            padding: 10px 24px;
-            background: #4f8ef7;
-            color: #fff;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: background 0.2s;
-        }
-        a:hover {
-            background: #357ae8;
-        }
-    </style>
-    <!-- Remix Icon CDN for user icon -->
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
-</head>
-<body>
-    <% if (typeof message !== 'undefined' && message) { %>
-      <script>
-        alert("<%= message %>");
-      </script>
-    <% } %>
-    <div class="profile-container">
-        <div class="profile-icon">
-            <i class="ri-user-line"></i>
-        </div>
-        <h1>Welcome, <%= user.username %>!</h1>
-        <p>Email: <%= user.email %></p>
-        <div class="bookings-list">
-            <h2>Your Bookings</h2>
-            <ul>
-                <% if (userBookings && userBookings.length > 0) { %>
-                    <% userBookings.forEach(function(b) { %>
-                        <li>
-                            <strong>Car:</strong> <%= b.carName %><br>
-                            <strong>Delivery Type:</strong> <%= b.deliveryType %><br>
-                            <strong>Picking Date:</strong> <%= b.pickingDate.toDateString() %><br>
-                            <strong>Dropping Date:</strong> <%= b.droppingDate.toDateString() %><br>
-                            <span class="status"><%= b.status %></span>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Profile</title>
 
-                        <button class="cancel-btn" data-id="<%= b._id %>">Cancel Car</button>
-                        
-                        
-<script>
-    // document.addEventListener('DOMContentLoaded', () => {
-    //     const cancelButtons = document.querySelectorAll('.cancel-btn');
+        <link
+            href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+            rel="stylesheet" />
 
-    //     cancelButtons.forEach(button => {
-    //         button.addEventListener('click', async (event) => {
-    //             const bookingId = event.target.getAttribute('data-id');
-    //             const li = event.target.closest('li'); // Get the closest li element
-                
-    //             if (confirm('Are you sure you want to cancel this booking?')) {
-    //                 try {
-    //                     const response = await fetch(`/bookings/cancel-booking/${bookingId}`, {
-    //                         method: 'DELETE',
-    //                     });
-
-    //                     if (response.ok) {
-    //                         alert('Booking cancelled successfully.');
-    //                         // location.reload();
-    //                         li.remove(); // Remove the li element from the DOM
-    //                     } else {
-    //                         alert('Failed to cancel booking.');
-    //                     }
-    //                 } catch (error) {
-    //                     console.error('Error:', error);
-    //                     alert('An error occurred while cancelling the booking.');
-    //                 }
-    //             }
-    //         });
-    //     });
-    // });
-
-    //or 
-
-    async function cancelBooking(id,li) {
-    if (!confirm("Are you sure you want to cancel this booking?")) return;
-
-    try {
-        const res = await fetch(`/bookings/cancel-booking/${id}`, {
-            method: "DELETE"
-        });
-
-        const data = await res.json();
-        alert(data.message);
-
-        // reload page or remove row dynamically
-        location.reload();
-    } catch (err) {
-        console.error("Error cancelling booking:", err);
-        alert("Server error, please try again");
-    }
+        <style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
 }
 
-document.querySelectorAll('.cancel-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const bookingId = btn.getAttribute('data-id');
-        cancelBooking(bookingId);
-    });
+body{
+    background:linear-gradient(135deg,#0f172a,#1e293b,#334155);
+    min-height:100vh;
+    padding:40px;
+}
+
+.profile-container{
+    max-width:900px;
+    margin:auto;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:25px;
+    padding:40px;
+    box-shadow:0 10px 30px rgba(0,0,0,.4);
+}
+
+.back-btn{
+    width:50px;
+    height:50px;
+    border:none;
+    border-radius:50%;
+    background:white;
+    cursor:pointer;
+    font-size:24px;
+    transition:.3s;
+}
+
+.back-btn:hover{
+    transform:scale(1.1);
+}
+
+.profile-top{
+    text-align:center;
+    margin-top:20px;
+}
+
+.profile-icon{
+    width:110px;
+    height:110px;
+    margin:auto;
+    background:#3b82f6;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:55px;
+    color:white;
+}
+
+.profile-top h1{
+    color:white;
+    margin-top:20px;
+}
+
+.email{
+    color:#cbd5e1;
+    margin-top:10px;
+}
+
+.section-title{
+    color:white;
+    margin-top:50px;
+    margin-bottom:20px;
+}
+
+.booking-card{
+    background:white;
+    border-radius:20px;
+    padding:25px;
+    margin-bottom:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,.15);
+    transition:.3s;
+}
+
+.booking-card:hover{
+    transform:translateY(-5px);
+}
+
+.car-name{
+    font-size:22px;
+    font-weight:700;
+    margin-bottom:15px;
+}
+
+.info{
+    margin-bottom:10px;
+    color:#444;
+}
+
+.status{
+    display:inline-block;
+    background:#22c55e;
+    color:white;
+    padding:8px 18px;
+    border-radius:20px;
+    margin-top:10px;
+}
+
+.cancel-btn{
+    margin-top:20px;
+    border:none;
+    background:#ef4444;
+    color:white;
+    padding:12px 25px;
+    border-radius:12px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.cancel-btn:hover{
+    background:#dc2626;
+}
+
+.logout-btn{
+    display:block;
+    width:180px;
+    margin:40px auto 0;
+    text-align:center;
+    text-decoration:none;
+    background:black;
+    color:white;
+    padding:15px;
+    border-radius:15px;
+    transition:.3s;
+}
+
+.logout-btn:hover{
+    background:#111827;
+}
+
+.empty{
+    color:white;
+    text-align:center;
+    margin-top:20px;
+    font-size:18px;
+}
+
+@media(max-width:768px){
+    .profile-container{
+        padding:20px;
+    }
+}
+</style>
+    </head>
+    <body>
+
+        <% if (typeof message !== 'undefined' && message) { %>
+        <script>
+alert("<%= message %>");
+</script>
+        <% } %>
+
+        <div class="profile-container">
+
+            <button class="back-btn" onclick="window.location.href='/'">
+                <i class="ri-arrow-left-line"></i>
+            </button>
+
+            <div class="profile-top">
+
+                <div class="profile-icon">
+                    <i class="ri-user-3-line"></i>
+                </div>
+
+                <h1>Welcome, <%= user.username %></h1>
+
+                <p class="email">
+                    <i class="ri-mail-line"></i>
+                    <%= user.email %>
+                </p>
+
+            </div>
+
+            <h2 class="section-title">
+                <i class="ri-car-line"></i>
+                Your Bookings
+            </h2>
+
+            <% if(userBookings && userBookings.length > 0){ %>
+
+            <% userBookings.forEach(function(b){ %>
+
+            <div class="booking-card">
+
+                <div class="car-name">
+                    🚗 <%= b.carName %>
+                </div>
+
+                <div class="info">
+                    <b>Delivery Type:</b>
+                    <%= b.deliveryType %>
+                </div>
+
+                <div class="info">
+                    <b>Pickup Date:</b>
+                    <%= b.pickingDate.toDateString() %>
+                </div>
+
+                <div class="info">
+                    <b>Drop Date:</b>
+                    <%= b.droppingDate.toDateString() %>
+                </div>
+
+                <span class="status">
+                    <%= b.status %>
+                </span>
+
+                <br>
+
+                <button class="cancel-btn" data-id="<%= b._id %>">
+                    Cancel Booking
+                </button>
+
+            </div>
+
+            <% }) %>
+
+            <% } else { %>
+
+            <div class="empty">
+                No bookings available 🚗
+            </div>
+
+            <% } %>
+
+            <a href="/logout" class="logout-btn">
+                <i class="ri-logout-box-r-line"></i>
+                Logout
+            </a>
+
+        </div>
+
+        <script>
+
+async function cancelBooking(id){
+
+if(!confirm("Are you sure you want to cancel this booking?")){
+return;
+}
+
+try{
+
+const res=await fetch(`/bookings/cancel-booking/${id}`,{
+method:"DELETE"
 });
 
+const data=await res.json();
 
+alert(data.message);
+
+location.reload();
+
+}
+catch(err){
+
+alert("Server Error");
+
+}
+
+}
+
+document.querySelectorAll(".cancel-btn").forEach(btn=>{
+
+btn.addEventListener("click",()=>{
+
+const bookingId=btn.dataset.id;
+
+cancelBooking(bookingId);
+
+});
+
+});
 
 </script>
-                        </li>
-                    <% }) %>
-                <% } else { %>
-                    <li>No bookings yet.</li>
-                <% } %>
-            </ul>
-        </div>
-        <a href="/logout">Logout</a>
-        
-    </div>
-    
 
-</body>
+    </body>
 </html>
+```

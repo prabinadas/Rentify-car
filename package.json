@@ -1,31 +1,33 @@
 {
-  "name": "car",
+  "name": "rentify-carweb",
   "version": "1.0.0",
+  "description": "��#\u0000 \u0000R\u0000e\u0000n\u0000t\u0000i\u0000f\u0000y\u0000-\u0000c\u0000a\u0000r\u0000\r\u0000 \u0000",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
-  "engines": {
-    "node": "22.x"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prabinadas/Rentify-car.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "bugs": {
+    "url": "https://github.com/prabinadas/Rentify-car/issues"
+  },
+  "homepage": "https://github.com/prabinadas/Rentify-car#readme",
   "dependencies": {
     "bcrypt": "^6.0.0",
-    "bcryptjs": "^3.0.2",
-    "config": "^4.2.0",
-    "connect-mongo": "^5.1.0",
-    "dotenv": "^17.2.3",
-    "ejs": "^3.1.10",
-    "express": "^5.1.0",
+    "connect-mongo": "^6.0.0",
+    "dotenv": "^17.4.2",
+    "ejs": "^6.0.1",
+    "express": "^5.2.1",
     "express-ejs-layouts": "^2.5.1",
-    "express-session": "^1.18.2",
-    "mongodb": "^6.21.0",
-    "mongoose": "^8.21.1",
-    "morgan": "^1.10.1",
+    "express-session": "^1.19.0",
+    "mongoose": "^9.7.1",
+    "morgan": "^1.11.0",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "razorpay": "^2.9.6"

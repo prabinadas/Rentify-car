@@ -1,51 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Book Car</title>
-    <style>
-        body { font-family: Arial, sans-serif; background: #f4f6fb; }
-        .booking-container { max-width: 400px; margin: 60px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 32px 24px; }
-        label { display: block; margin-top: 16px; }
-        input, select { width: 100%; padding: 8px; margin-top: 4px; border-radius: 4px; border: 1px solid #ccc; }
-        button { margin-top: 24px; padding: 10px 24px; background: #4f8ef7; color: #fff; border-radius: 6px; border: none; font-weight: 500; cursor: pointer;align-items: content;}
-        button:hover { background: #357ae8; } 
-            
-        
-    </style>
+<meta charset="UTF-8">
+<title>Book Car</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Segoe UI',sans-serif;
+    background:#f4f7fc;
+}
+
+.booking-container{
+    width:450px;
+    background:white;
+    padding:30px;
+    margin:50px auto;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.1);
+}
+
+h2{
+    text-align:center;
+    color:#2563eb;
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+    margin-top:15px;
+    font-weight:600;
+}
+
+input,select{
+    width:100%;
+    padding:12px;
+    margin-top:6px;
+    border:1px solid #ddd;
+    border-radius:8px;
+}
+
+.address-box{
+    display:none;
+}
+
+.summary{
+    background:#f1f5ff;
+    padding:15px;
+    margin-top:20px;
+    border-radius:10px;
+}
+
+.summary p{
+    margin:8px 0;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    margin-top:25px;
+    border:none;
+    background:#2563eb;
+    color:white;
+    border-radius:10px;
+    font-size:17px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+</style>
 </head>
 <body>
-    <div class="booking-container">
-        <h2>Book <%= carName %></h2>
-        <form action="/book" method="POST">
-            <input type="hidden" name="carName" value="<%= carName %>">
-            <label>Delivery Type:</label>
-            <select name="deliveryType" required>
-            <option value="">choose delivery option</option>
-                
-                <option value="Home delivery">Home delivery</option>
-                <option value="Parking place">Parking place</option>
-                <option value="Airport/Railway">Airport/Railway</option>
-            </select>
-            <label>Picking Date:</label>
-            <input type="date" id="pickup" min="" name="pickingDate" required>
-            <label>Dropping Date:</label>
-            <input type="date" id="drop" min="" name="droppingDate" required>
-            <button type="submit">Book</button>
-        </form>
-    </div>
-    <script>
-        
-const today = new Date().toISOString().split("T")[0];
 
-    // pickup & drop cannot be less than today
-    document.getElementById("pickup").setAttribute("min", today);
-    document.getElementById("drop").setAttribute("min", today);
+<div class="booking-container">
 
-    // drop date cannot be less than pickup date
-    document.getElementById("pickup").addEventListener("change", function(){
-        document.getElementById("drop").setAttribute("min", this.value);
-    });
-    </script>
+<h2>Book <%= carName %></h2>
+
+<form action="/payment" method="POST">
+
+<input type="hidden" name="carName" value="<%= carName %>">
+
+<!-- Pass price from backend -->
+<input type="hidden"
+       id="pricePerDay"
+       name="pricePerDay"
+       value="<%= pricePerDay || 0 %>">
+
+<label>Delivery Location</label>
+
+<select id="deliveryType" name="deliveryType" required>
+
+<option value="">Choose Location</option>
+
+<option value="Home Delivery">Home Delivery</option>
+
+<option value="Airport">Airport</option>
+
+<option value="Railway Station">Railway Station</option>
+
+<option value="Parking Place">Parking Place</option>
+
+</select>
+
+
+<div class="address-box" id="addressBox">
+
+<label>Select Address</label>
+
+<select name="deliveryAddress">
+
+<option>Patia, Bhubaneswar</option>
+
+<option>KIIT Square, Bhubaneswar</option>
+
+<option>Master Canteen</option>
+
+<option>Bhubaneswar Railway Station</option>
+
+<option>Biju Patnaik Airport</option>
+
+</select>
+
+</div>
+
+<label>Pickup Date</label>
+
+<input type="date" id="pickup" name="pickingDate" required>
+
+<label>Drop Date</label>
+
+<input type="date" id="drop" name="droppingDate" required>
+
+<div class="summary">
+
+<p>Price Per Day : ₹<span id="price"><%= pricePerDay %></span></p>
+
+<p>Total Days : <span id="days">1</span></p>
+
+<h3>Total Amount : ₹<span id="amount"><%= pricePerDay %></span></h3>
+
+</div>
+
+
+<input type="hidden" name="totalAmount" id="hiddenAmount">
+
+<button type="submit">
+Continue To Payment
+</button>
+
+</form>
+
+</div>
+
+<script>
+
+const today=new Date().toISOString().split("T")[0];
+
+pickup.min=today;
+drop.min=today;
+
+pickup.addEventListener("change",()=>{
+
+drop.min=pickup.value;
+
+calculate();
+
+});
+
+drop.addEventListener("change",calculate);
+
+function calculate(){
+
+let p=new Date(pickup.value);
+let d=new Date(drop.value);
+
+if(p && d && d>p){
+
+let diff=Math.ceil((d-p)/(1000*60*60*24));
+
+document.getElementById("days").innerHTML=diff;
+
+let price=Number(document.getElementById("pricePerDay").value);
+
+let total=diff*price;
+
+document.getElementById("amount").innerHTML=total;
+
+document.getElementById("hiddenAmount").value=total;
+
+}
+
+}
+
+deliveryType.addEventListener("change",()=>{
+
+document.getElementById("addressBox").style.display="block";
+
+});
+
+</script>
+
 </body>
 </html>
