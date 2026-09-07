@@ -1,213 +1,1990 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>Book Car</title>
 
-<style>
+    <meta charset="UTF-8">
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-body{
-    font-family:'Segoe UI',sans-serif;
-    background:#f4f7fc;
-}
+    <title>Book <%= carName %> | Rentify</title>
 
-.booking-container{
-    width:450px;
-    background:white;
-    padding:30px;
-    margin:50px auto;
-    border-radius:15px;
-    box-shadow:0 5px 20px rgba(0,0,0,.1);
-}
+    <!-- Leaflet CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
 
-h2{
-    text-align:center;
-    color:#2563eb;
-    margin-bottom:20px;
-}
+    <style>
 
-label{
-    display:block;
-    margin-top:15px;
-    font-weight:600;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-input,select{
-    width:100%;
-    padding:12px;
-    margin-top:6px;
-    border:1px solid #ddd;
-    border-radius:8px;
-}
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background:
+                linear-gradient(135deg, #eef4ff 0%, #f8fafc 45%, #eef2ff 100%);
+            color: #111827;
+            min-height: 100vh;
+        }
 
-.address-box{
-    display:none;
-}
+        /* =========================================
+           MAIN
+        ========================================= */
 
-.summary{
-    background:#f1f5ff;
-    padding:15px;
-    margin-top:20px;
-    border-radius:10px;
-}
+        .booking-wrapper {
+            width: 100%;
+            max-width: 1050px;
+            margin: 35px auto;
+            padding: 20px;
+        }
 
-.summary p{
-    margin:8px 0;
-}
+        .booking-card {
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 20px 60px rgba(15, 23, 42, 0.10);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
 
-button{
-    width:100%;
-    padding:15px;
-    margin-top:25px;
-    border:none;
-    background:#2563eb;
-    color:white;
-    border-radius:10px;
-    font-size:17px;
-    cursor:pointer;
-}
+        /* =========================================
+           HEADER
+        ========================================= */
 
-button:hover{
-    background:#1d4ed8;
-}
+        .booking-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
 
-</style>
+        .booking-icon {
+            width: 58px;
+            height: 58px;
+            margin: 0 auto 15px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eff6ff;
+            font-size: 28px;
+        }
+
+        .booking-header h1 {
+            font-size: 30px;
+            color: #1d4ed8;
+            margin-bottom: 8px;
+            font-weight: 750;
+        }
+
+        .booking-header p {
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        /* =========================================
+           FORM
+        ========================================= */
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 9px;
+            color: #1e293b;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 14px 15px;
+            border: 1px solid #dbe2ea;
+            border-radius: 12px;
+            outline: none;
+            font-size: 15px;
+            background: #fff;
+            color: #111827;
+            transition: 0.2s ease;
+        }
+
+        input:hover,
+        select:hover {
+            border-color: #94a3b8;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.10);
+        }
+
+        /* =========================================
+           LOCATION SECTION
+        ========================================= */
+
+        .location-section {
+            display: none;
+            margin: 10px 0 25px;
+            padding: 22px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 18px;
+        }
+
+        .location-section.active {
+            display: block;
+            animation: fadeIn 0.25s ease;
+        }
+
+        @keyframes fadeIn {
+
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+        .location-title {
+            font-size: 19px;
+            font-weight: 750;
+            margin-bottom: 16px;
+            color: #0f172a;
+        }
+
+        .location-subtitle {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: -8px;
+            margin-bottom: 17px;
+        }
+
+        /* =========================================
+           SEARCH
+        ========================================= */
+
+        .search-row {
+            display: flex;
+            gap: 10px;
+            position: relative;
+        }
+
+        .search-input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-input-wrapper input {
+            padding-right: 45px;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            pointer-events: none;
+        }
+
+        .search-btn {
+            width: auto;
+            min-width: 105px;
+            margin: 0;
+            padding: 13px 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+
+        .search-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .search-btn:disabled {
+            background: #93c5fd;
+            cursor: wait;
+        }
+
+        /* =========================================
+           CURRENT LOCATION
+        ========================================= */
+
+        .my-location-btn {
+            width: 100%;
+            margin-top: 10px;
+            padding: 13px;
+            border: 1px solid #bfdbfe;
+            background: #fff;
+            color: #2563eb;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+
+        .my-location-btn:hover {
+            background: #eff6ff;
+        }
+
+        .my-location-btn:disabled {
+            opacity: 0.7;
+            cursor: wait;
+        }
+
+        /* =========================================
+           MAP
+        ========================================= */
+
+        #map {
+            width: 100%;
+            height: 390px;
+            margin-top: 15px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #cbd5e1;
+            background: #e2e8f0;
+            z-index: 1;
+        }
+
+        .map-info {
+            margin-top: 10px;
+            color: #64748b;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* =========================================
+           SELECTED ADDRESS
+        ========================================= */
+
+        .selected-location {
+            margin-top: 18px;
+        }
+
+        .selected-location label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1e293b;
+        }
+
+        .selected-address {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+
+        .coordinates {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .coordinate-box {
+            flex: 1;
+            font-size: 12px;
+            color: #64748b;
+            background: #fff;
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* =========================================
+           DATE GRID
+        ========================================= */
+
+        .date-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        /* =========================================
+           SUMMARY
+        ========================================= */
+
+        .summary {
+            margin-top: 10px;
+            background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+            border: 1px solid #dbeafe;
+            padding: 22px;
+            border-radius: 18px;
+        }
+
+        .summary-title {
+            font-size: 18px;
+            font-weight: 750;
+            margin-bottom: 17px;
+            color: #1e3a8a;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 11px 0;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .summary-row span:last-child {
+            font-weight: 650;
+            color: #1e293b;
+        }
+
+        .summary-total {
+            border-top: 1px solid #bfdbfe;
+            margin-top: 16px;
+            padding-top: 16px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 21px;
+            font-weight: 750;
+            color: #111827;
+        }
+
+        /* =========================================
+           PAYMENT BUTTON
+        ========================================= */
+
+        .continue-btn {
+            width: 100%;
+            margin-top: 25px;
+            padding: 16px;
+            border: none;
+            border-radius: 13px;
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            color: white;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.20);
+        }
+
+        .continue-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(37, 99, 235, 0.28);
+        }
+
+        .continue-btn:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* =========================================
+           STATUS MESSAGE
+        ========================================= */
+
+        .status-message {
+            display: none;
+            margin-top: 12px;
+            padding: 11px 13px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .status-message.show {
+            display: block;
+        }
+
+        .status-message.error {
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .status-message.success {
+            background: #f0fdf4;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 700px) {
+
+            .booking-wrapper {
+                margin: 10px auto;
+                padding: 10px;
+            }
+
+            .booking-card {
+                padding: 20px;
+                border-radius: 18px;
+            }
+
+            .booking-header h1 {
+                font-size: 24px;
+            }
+
+            .location-section {
+                padding: 15px;
+            }
+
+            .date-grid {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .search-row {
+                flex-direction: column;
+            }
+
+            .search-btn {
+                width: 100%;
+            }
+
+            #map {
+                height: 320px;
+            }
+
+            .coordinates {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+        }
+
+    </style>
+
 </head>
+
+
 <body>
 
-<div class="booking-container">
+<div class="booking-wrapper">
 
-<h2>Book <%= carName %></h2>
+    <div class="booking-card">
 
-<form action="/payment" method="POST">
+        <!-- HEADER -->
 
-<input type="hidden" name="carName" value="<%= carName %>">
+        <div class="booking-header">
 
-<!-- Pass price from backend -->
-<input type="hidden"
-       id="pricePerDay"
-       name="pricePerDay"
-       value="<%= pricePerDay || 0 %>">
+            <div class="booking-icon">
+                🚗
+            </div>
 
-<label>Delivery Location</label>
+            <h1>
+                Book <%= carName %>
+            </h1>
 
-<select id="deliveryType" name="deliveryType" required>
+            <p>
+                Select your pickup location and rental dates
+            </p>
 
-<option value="">Choose Location</option>
-
-<option value="Home Delivery">Home Delivery</option>
-
-<option value="Airport">Airport</option>
-
-<option value="Railway Station">Railway Station</option>
-
-<option value="Parking Place">Parking Place</option>
-
-</select>
+        </div>
 
 
-<div class="address-box" id="addressBox">
+        <form
+            action="/payment"
+            method="POST"
+            id="bookingForm"
+        >
 
-<label>Select Address</label>
+            <!-- =====================================
+                 HIDDEN CAR DATA
+            ====================================== -->
 
-<select name="deliveryAddress">
+            <input
+                type="hidden"
+                name="carName"
+                value="<%= carName %>"
+            >
 
-<option>Patia, Bhubaneswar</option>
+            <input
+                type="hidden"
+                id="pricePerDay"
+                name="pricePerDay"
+                value="<%= pricePerDay || 0 %>"
+            >
 
-<option>KIIT Square, Bhubaneswar</option>
 
-<option>Master Canteen</option>
+            <!-- =====================================
+                 DELIVERY TYPE
+            ====================================== -->
 
-<option>Bhubaneswar Railway Station</option>
+            <div class="form-group">
 
-<option>Biju Patnaik Airport</option>
+                <label for="deliveryType">
+                    Pickup / Delivery Type
+                </label>
 
-</select>
+                <select
+                    id="deliveryType"
+                    name="deliveryType"
+                    required
+                >
+
+                    <option value="">
+                        Select pickup type
+                    </option>
+
+                    <option value="Home Delivery">
+                        🏠 Home Delivery
+                    </option>
+
+                    <option value="Airport">
+                        ✈️ Airport
+                    </option>
+
+                    <option value="Railway Station">
+                        🚆 Railway Station
+                    </option>
+
+                    <option value="Parking Place">
+                        🅿️ Parking Place
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- =====================================
+                 LOCATION SECTION
+            ====================================== -->
+
+            <div
+                class="location-section"
+                id="locationSection"
+            >
+
+                <div class="location-title">
+                    📍 Choose Pickup Location
+                </div>
+
+                <div class="location-subtitle">
+                    Search for a place or click directly on the map.
+                </div>
+
+
+                <!-- SEARCH -->
+
+                <div class="search-row">
+
+                    <div class="search-input-wrapper">
+
+                        <input
+                            type="text"
+                            id="locationSearch"
+                            placeholder="Search area, street, landmark..."
+                            autocomplete="off"
+                        >
+
+                        <span class="search-icon">
+                            🔎
+                        </span>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="search-btn"
+                        id="searchLocation"
+                    >
+                        Search
+                    </button>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div
+                    id="statusMessage"
+                    class="status-message"
+                ></div>
+
+
+                <!-- CURRENT LOCATION -->
+
+                <button
+                    type="button"
+                    class="my-location-btn"
+                    id="myLocationBtn"
+                >
+                    📍 Use My Current Location
+                </button>
+
+
+                <!-- MAP -->
+
+                <div id="map"></div>
+
+
+                <div class="map-info">
+                    🗺️ Click anywhere on the map to select your pickup location.
+                </div>
+
+
+                <!-- SELECTED ADDRESS -->
+
+                <div class="selected-location">
+
+                    <label for="selectedAddress">
+                        Selected Location
+                    </label>
+
+                    <input
+                        type="text"
+                        id="selectedAddress"
+                        name="deliveryAddress"
+                        class="selected-address"
+                        placeholder="Select a location from the map"
+                        readonly
+                        required
+                    >
+
+                </div>
+
+
+                <!-- COORDINATES -->
+
+                <div class="coordinates">
+
+                    <div class="coordinate-box">
+                        Latitude:
+                        <strong id="latitudeDisplay">-</strong>
+                    </div>
+
+                    <div class="coordinate-box">
+                        Longitude:
+                        <strong id="longitudeDisplay">-</strong>
+                    </div>
+
+                </div>
+
+
+                <!-- HIDDEN COORDINATES -->
+
+                <input
+                    type="hidden"
+                    id="latitude"
+                    name="latitude"
+                >
+
+                <input
+                    type="hidden"
+                    id="longitude"
+                    name="longitude"
+                >
+
+            </div>
+
+
+            <!-- =====================================
+                 DATES
+            ====================================== -->
+
+            <div class="date-grid">
+
+                <div class="form-group">
+
+                    <label for="pickup">
+                        Pickup Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="pickup"
+                        name="pickingDate"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="drop">
+                        Drop Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="drop"
+                        name="droppingDate"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================
+                 SUMMARY
+            ====================================== -->
+
+            <div class="summary">
+
+                <div class="summary-title">
+                    🧾 Booking Summary
+                </div>
+
+
+                <div class="summary-row">
+
+                    <span>
+                        Price Per Day
+                    </span>
+
+                    <span>
+                        ₹<span id="price">
+                            <%= pricePerDay || 0 %>
+                        </span>
+                    </span>
+
+                </div>
+
+
+                <div class="summary-row">
+
+                    <span>
+                        Total Days
+                    </span>
+
+                    <span id="days">
+                        1
+                    </span>
+
+                </div>
+
+
+                <div class="summary-total">
+
+                    <span>
+                        Total Amount
+                    </span>
+
+                    <span>
+                        ₹<span id="amount">
+                            <%= pricePerDay || 0 %>
+                        </span>
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- HIDDEN TOTAL -->
+
+            <input
+                type="hidden"
+                name="totalAmount"
+                id="hiddenAmount"
+                value="<%= pricePerDay || 0 %>"
+            >
+
+
+            <!-- =====================================
+                 CONTINUE
+            ====================================== -->
+
+            <button
+                type="submit"
+                class="continue-btn"
+                id="continueBtn"
+            >
+                Continue To Payment →
+            </button>
+
+        </form>
+
+    </div>
 
 </div>
 
-<label>Pickup Date</label>
 
-<input type="date" id="pickup" name="pickingDate" required>
+<!-- =============================================
+     LEAFLET JS
+============================================= -->
 
-<label>Drop Date</label>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<input type="date" id="drop" name="droppingDate" required>
-
-<div class="summary">
-
-<p>Price Per Day : ₹<span id="price"><%= pricePerDay %></span></p>
-
-<p>Total Days : <span id="days">1</span></p>
-
-<h3>Total Amount : ₹<span id="amount"><%= pricePerDay %></span></h3>
-
-</div>
-
-
-<input type="hidden" name="totalAmount" id="hiddenAmount">
-
-<button type="submit">
-Continue To Payment
-</button>
-
-</form>
-
-</div>
 
 <script>
 
-const today=new Date().toISOString().split("T")[0];
+/* =====================================================
+   ELEMENTS
+===================================================== */
 
-pickup.min=today;
-drop.min=today;
+const deliveryType =
+    document.getElementById("deliveryType");
 
-pickup.addEventListener("change",()=>{
+const locationSection =
+    document.getElementById("locationSection");
 
-drop.min=pickup.value;
+const locationSearch =
+    document.getElementById("locationSearch");
 
-calculate();
+const searchLocation =
+    document.getElementById("searchLocation");
 
-});
+const myLocationBtn =
+    document.getElementById("myLocationBtn");
 
-drop.addEventListener("change",calculate);
+const selectedAddress =
+    document.getElementById("selectedAddress");
 
-function calculate(){
+const latitude =
+    document.getElementById("latitude");
 
-let p=new Date(pickup.value);
-let d=new Date(drop.value);
+const longitude =
+    document.getElementById("longitude");
 
-if(p && d && d>p){
+const latitudeDisplay =
+    document.getElementById("latitudeDisplay");
 
-let diff=Math.ceil((d-p)/(1000*60*60*24));
+const longitudeDisplay =
+    document.getElementById("longitudeDisplay");
 
-document.getElementById("days").innerHTML=diff;
+const pickup =
+    document.getElementById("pickup");
 
-let price=Number(document.getElementById("pricePerDay").value);
+const drop =
+    document.getElementById("drop");
 
-let total=diff*price;
+const pricePerDay =
+    document.getElementById("pricePerDay");
 
-document.getElementById("amount").innerHTML=total;
+const daysElement =
+    document.getElementById("days");
 
-document.getElementById("hiddenAmount").value=total;
+const amountElement =
+    document.getElementById("amount");
+
+const hiddenAmount =
+    document.getElementById("hiddenAmount");
+
+const bookingForm =
+    document.getElementById("bookingForm");
+
+const statusMessage =
+    document.getElementById("statusMessage");
+
+
+/* =====================================================
+   MAP VARIABLES
+===================================================== */
+
+let map = null;
+
+let marker = null;
+
+let mapInitialized = false;
+
+
+/* =====================================================
+   DEFAULT LOCATION
+   BHUBANESWAR
+===================================================== */
+
+const defaultLat = 20.2961;
+
+const defaultLng = 85.8245;
+
+
+/* =====================================================
+   TODAY
+===================================================== */
+
+const today =
+    new Date().toISOString().split("T")[0];
+
+pickup.min = today;
+
+drop.min = today;
+
+
+/* =====================================================
+   STATUS MESSAGE
+===================================================== */
+
+function showStatus(message, type = "error") {
+
+    statusMessage.textContent = message;
+
+    statusMessage.className =
+        `status-message show ${type}`;
 
 }
 
+
+function hideStatus() {
+
+    statusMessage.textContent = "";
+
+    statusMessage.className =
+        "status-message";
+
 }
 
-deliveryType.addEventListener("change",()=>{
 
-document.getElementById("addressBox").style.display="block";
+/* =====================================================
+   SHOW LOCATION SECTION
+===================================================== */
+
+deliveryType.addEventListener("change", function () {
+
+    if (this.value) {
+
+        locationSection.classList.add("active");
+
+
+        if (!mapInitialized) {
+
+            initializeMap();
+
+        } else {
+
+            setTimeout(() => {
+
+                map.invalidateSize();
+
+            }, 100);
+
+        }
+
+    } else {
+
+        locationSection.classList.remove("active");
+
+    }
 
 });
+
+
+/* =====================================================
+   INITIALIZE MAP
+===================================================== */
+
+function initializeMap() {
+
+    if (mapInitialized) {
+        return;
+    }
+
+
+    map = L.map("map", {
+        zoomControl: true
+    }).setView(
+        [defaultLat, defaultLng],
+        13
+    );
+
+
+    /* =============================================
+       OPENSTREETMAP TILES
+    ============================================= */
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            maxZoom: 19,
+
+            attribution:
+                '&copy; OpenStreetMap contributors'
+        }
+    ).addTo(map);
+
+
+    /* =============================================
+       MAP CLICK
+    ============================================= */
+
+    map.on("click", function (event) {
+
+        const lat =
+            event.latlng.lat;
+
+        const lng =
+            event.latlng.lng;
+
+        selectLocation(lat, lng);
+
+    });
+
+
+    mapInitialized = true;
+
+
+    /* =============================================
+       FIX MAP SIZE
+    ============================================= */
+
+    setTimeout(() => {
+
+        map.invalidateSize();
+
+    }, 300);
+
+}
+
+
+/* =====================================================
+   ADD / MOVE MARKER
+===================================================== */
+
+function updateMarker(lat, lng) {
+
+    if (!map) {
+        return;
+    }
+
+
+    if (marker) {
+
+        marker.setLatLng([
+            lat,
+            lng
+        ]);
+
+    } else {
+
+        marker =
+            L.marker([
+                lat,
+                lng
+            ]).addTo(map);
+
+    }
+
+
+    marker.bindPopup(
+        "<strong>Pickup Location</strong>"
+    ).openPopup();
+
+}
+
+
+/* =====================================================
+   SELECT LOCATION
+===================================================== */
+
+async function selectLocation(lat, lng) {
+
+    if (!map) {
+        initializeMap();
+    }
+
+
+    /* =============================================
+       UPDATE MARKER
+    ============================================= */
+
+    updateMarker(lat, lng);
+
+
+    /* =============================================
+       SAVE COORDINATES
+    ============================================= */
+
+    latitude.value =
+        lat.toFixed(6);
+
+    longitude.value =
+        lng.toFixed(6);
+
+
+    latitudeDisplay.textContent =
+        lat.toFixed(6);
+
+    longitudeDisplay.textContent =
+        lng.toFixed(6);
+
+
+    /* =============================================
+       MOVE MAP
+    ============================================= */
+
+    map.setView(
+        [lat, lng],
+        16,
+        {
+            animate: true
+        }
+    );
+
+
+    /* =============================================
+       LOADING ADDRESS
+    ============================================= */
+
+    selectedAddress.value =
+        "Getting address...";
+
+
+    hideStatus();
+
+
+    /* =============================================
+       REVERSE GEOCODING
+       PHOTON
+    ============================================= */
+
+    try {
+
+        const url =
+            `https://photon.komoot.io/reverse?lat=${lat}&lon=${lng}`;
+
+        const response =
+            await fetch(url);
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Reverse geocoding failed"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            data.features &&
+            data.features.length > 0
+        ) {
+
+            const properties =
+                data.features[0].properties;
+
+
+            const addressParts = [
+
+                properties.name,
+
+                properties.street,
+
+                properties.housenumber,
+
+                properties.district,
+
+                properties.city,
+
+                properties.county,
+
+                properties.state,
+
+                properties.country
+
+            ].filter(Boolean);
+
+
+            const uniqueParts =
+                [...new Set(addressParts)];
+
+
+            if (uniqueParts.length > 0) {
+
+                selectedAddress.value =
+                    uniqueParts.join(", ");
+
+            } else {
+
+                selectedAddress.value =
+                    `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+
+            }
+
+        } else {
+
+            selectedAddress.value =
+                `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+
+        }
+
+
+        showStatus(
+            "Pickup location selected successfully.",
+            "success"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Reverse geocoding error:",
+            error
+        );
+
+
+        /*
+         * Even if address API fails,
+         * coordinates are still valid.
+         */
+
+        selectedAddress.value =
+            `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+
+
+        showStatus(
+            "Location selected. Address could not be loaded.",
+            "success"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   LOCATION SEARCH
+===================================================== */
+
+searchLocation.addEventListener(
+    "click",
+    searchForLocation
+);
+
+
+locationSearch.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (event.key === "Enter") {
+
+            event.preventDefault();
+
+            searchForLocation();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   SEARCH FUNCTION
+===================================================== */
+
+async function searchForLocation() {
+
+    const query =
+        locationSearch.value.trim();
+
+
+    if (!query) {
+
+        showStatus(
+            "Please enter a location to search."
+        );
+
+        locationSearch.focus();
+
+        return;
+
+    }
+
+
+    if (!map) {
+
+        initializeMap();
+
+    }
+
+
+    searchLocation.disabled =
+        true;
+
+    searchLocation.textContent =
+        "Searching...";
+
+    hideStatus();
+
+
+    try {
+
+        /*
+         * Search with Bhubaneswar context first.
+         *
+         * This improves local results.
+         */
+
+        let searchQuery =
+            `${query}, Bhubaneswar, Odisha, India`;
+
+
+        let url =
+            `https://nominatim.openstreetmap.org/search` +
+            `?format=json` +
+            `&q=${encodeURIComponent(searchQuery)}` +
+            `&limit=5` +
+            `&addressdetails=1`;
+
+
+        let response =
+            await fetch(url, {
+                headers: {
+                    "Accept":
+                        "application/json"
+                }
+            });
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Search API failed"
+            );
+
+        }
+
+
+        let data =
+            await response.json();
+
+
+        /*
+         * If Bhubaneswar search gives no result,
+         * search the original query.
+         */
+
+        if (
+            !data ||
+            data.length === 0
+        ) {
+
+            console.log(
+                "Bhubaneswar search failed. Trying global search..."
+            );
+
+
+            url =
+                `https://nominatim.openstreetmap.org/search` +
+                `?format=json` +
+                `&q=${encodeURIComponent(query)}` +
+                `&limit=5` +
+                `&addressdetails=1`;
+
+
+            response =
+                await fetch(url, {
+                    headers: {
+                        "Accept":
+                            "application/json"
+                    }
+                });
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Second search failed"
+                );
+
+            }
+
+
+            data =
+                await response.json();
+
+        }
+
+
+        console.log(
+            "Location search results:",
+            data
+        );
+
+
+        /*
+         * Still no result
+         */
+
+        if (
+            !data ||
+            data.length === 0
+        ) {
+
+            showStatus(
+                "Location not found. Try an area, landmark, street or nearby place."
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * Use first result
+         */
+
+        const result =
+            data[0];
+
+
+        const lat =
+            Number(result.lat);
+
+        const lng =
+            Number(result.lon);
+
+
+        if (
+            Number.isNaN(lat) ||
+            Number.isNaN(lng)
+        ) {
+
+            throw new Error(
+                "Invalid coordinates"
+            );
+
+        }
+
+
+        /*
+         * Move map
+         */
+
+        map.setView(
+            [lat, lng],
+            16,
+            {
+                animate: true
+            }
+        );
+
+
+        /*
+         * Select location
+         */
+
+        await selectLocation(
+            lat,
+            lng
+        );
+
+
+        /*
+         * Put searched text in input
+         */
+
+        locationSearch.value =
+            result.display_name || query;
+
+
+    } catch (error) {
+
+        console.error(
+            "Location search error:",
+            error
+        );
+
+
+        showStatus(
+            "Unable to search location right now. Please try again."
+        );
+
+    } finally {
+
+        searchLocation.disabled =
+            false;
+
+        searchLocation.textContent =
+            "Search";
+
+    }
+
+}
+
+
+/* =====================================================
+   USE CURRENT LOCATION
+===================================================== */
+
+myLocationBtn.addEventListener(
+    "click",
+    useCurrentLocation
+);
+
+
+function useCurrentLocation() {
+
+    if (!navigator.geolocation) {
+
+        showStatus(
+            "Geolocation is not supported by your browser."
+        );
+
+        return;
+
+    }
+
+
+    if (!map) {
+
+        initializeMap();
+
+    }
+
+
+    myLocationBtn.disabled =
+        true;
+
+    myLocationBtn.textContent =
+        "📍 Detecting location...";
+
+    hideStatus();
+
+
+    navigator.geolocation.getCurrentPosition(
+
+        async function (position) {
+
+            try {
+
+                const lat =
+                    position.coords.latitude;
+
+                const lng =
+                    position.coords.longitude;
+
+
+                map.setView(
+                    [lat, lng],
+                    16,
+                    {
+                        animate: true
+                    }
+                );
+
+
+                await selectLocation(
+                    lat,
+                    lng
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    error
+                );
+
+                showStatus(
+                    "Could not select your current location."
+                );
+
+            } finally {
+
+                myLocationBtn.disabled =
+                    false;
+
+                myLocationBtn.textContent =
+                    "📍 Use My Current Location";
+
+            }
+
+        },
+
+
+        function (error) {
+
+            console.error(
+                "Geolocation error:",
+                error
+            );
+
+
+            let message =
+                "Unable to access your location.";
+
+
+            if (error.code === 1) {
+
+                message =
+                    "Location permission was denied. Please allow location access in your browser.";
+
+            }
+
+            else if (error.code === 2) {
+
+                message =
+                    "Your current location could not be detected.";
+
+            }
+
+            else if (error.code === 3) {
+
+                message =
+                    "Location request timed out. Please try again.";
+
+            }
+
+
+            showStatus(message);
+
+
+            myLocationBtn.disabled =
+                false;
+
+            myLocationBtn.textContent =
+                "📍 Use My Current Location";
+
+        },
+
+        {
+            enableHighAccuracy: true,
+
+            timeout: 10000,
+
+            maximumAge: 0
+        }
+
+    );
+
+}
+
+
+/* =====================================================
+   DATE VALIDATION
+===================================================== */
+
+pickup.addEventListener(
+    "change",
+    function () {
+
+        if (pickup.value) {
+
+            drop.min =
+                pickup.value;
+
+            /*
+             * If drop date is before pickup,
+             * clear it.
+             */
+
+            if (
+                drop.value &&
+                drop.value <= pickup.value
+            ) {
+
+                drop.value = "";
+
+            }
+
+        }
+
+
+        calculateTotal();
+
+    }
+);
+
+
+drop.addEventListener(
+    "change",
+    calculateTotal
+);
+
+
+/* =====================================================
+   CALCULATE TOTAL
+===================================================== */
+
+function calculateTotal() {
+
+    const price =
+        Number(pricePerDay.value) || 0;
+
+
+    /*
+     * No dates
+     */
+
+    if (
+        !pickup.value ||
+        !drop.value
+    ) {
+
+        daysElement.textContent =
+            "1";
+
+        amountElement.textContent =
+            price.toFixed(2);
+
+        hiddenAmount.value =
+            price.toFixed(2);
+
+        return;
+
+    }
+
+
+    const pickupDate =
+        new Date(
+            `${pickup.value}T00:00:00`
+        );
+
+
+    const dropDate =
+        new Date(
+            `${drop.value}T00:00:00`
+        );
+
+
+    /*
+     * Invalid dates
+     */
+
+    if (
+        Number.isNaN(pickupDate.getTime()) ||
+        Number.isNaN(dropDate.getTime())
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+     * Drop date must be after pickup date
+     */
+
+    if (
+        dropDate <= pickupDate
+    ) {
+
+        daysElement.textContent =
+            "0";
+
+        amountElement.textContent =
+            "0.00";
+
+        hiddenAmount.value =
+            "0";
+
+        return;
+
+    }
+
+
+    const difference =
+        dropDate.getTime() -
+        pickupDate.getTime();
+
+
+    const totalDays =
+        Math.ceil(
+            difference /
+            (1000 * 60 * 60 * 24)
+        );
+
+
+    const total =
+        totalDays * price;
+
+
+    daysElement.textContent =
+        totalDays;
+
+
+    amountElement.textContent =
+        total.toFixed(2);
+
+
+    hiddenAmount.value =
+        total.toFixed(2);
+
+}
+
+
+/* =====================================================
+   FORM VALIDATION
+===================================================== */
+
+bookingForm.addEventListener(
+    "submit",
+    function (event) {
+
+        /*
+         * Delivery type
+         */
+
+        if (!deliveryType.value) {
+
+            event.preventDefault();
+
+            alert(
+                "Please select a pickup / delivery type."
+            );
+
+            deliveryType.focus();
+
+            return;
+
+        }
+
+
+        /*
+         * Location
+         */
+
+        if (
+            !latitude.value ||
+            !longitude.value ||
+            !selectedAddress.value ||
+            selectedAddress.value ===
+            "Getting address..."
+        ) {
+
+            event.preventDefault();
+
+            alert(
+                "Please select your pickup location on the map."
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * Pickup date
+         */
+
+        if (!pickup.value) {
+
+            event.preventDefault();
+
+            alert(
+                "Please select a pickup date."
+            );
+
+            pickup.focus();
+
+            return;
+
+        }
+
+
+        /*
+         * Drop date
+         */
+
+        if (!drop.value) {
+
+            event.preventDefault();
+
+            alert(
+                "Please select a drop date."
+            );
+
+            drop.focus();
+
+            return;
+
+        }
+
+
+        /*
+         * Date comparison
+         */
+
+        if (
+            drop.value <= pickup.value
+        ) {
+
+            event.preventDefault();
+
+            alert(
+                "Drop date must be after the pickup date."
+            );
+
+            drop.focus();
+
+            return;
+
+        }
+
+
+        /*
+         * Amount
+         */
+
+        calculateTotal();
+
+
+        if (
+            Number(hiddenAmount.value) <= 0
+        ) {
+
+            event.preventDefault();
+
+            alert(
+                "Please check the booking dates and total amount."
+            );
+
+            return;
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   INITIAL TOTAL
+===================================================== */
+
+calculateTotal();
+
+
+/* =====================================================
+   OPTIONAL:
+   INITIALIZE MAP IF DELIVERY TYPE ALREADY SELECTED
+===================================================== */
+
+if (deliveryType.value) {
+
+    locationSection.classList.add(
+        "active"
+    );
+
+    setTimeout(() => {
+
+        initializeMap();
+
+    }, 100);
+
+}
 
 </script>
 
 </body>
+
 </html>
+```

@@ -14,6 +14,22 @@
 
     <title>Rentify by Prabina</title>
     <link rel="icon" type="image/png" href="car/public/logo-white.png">
+    <style>
+      .marquee{
+        text-align: center;
+        color: rgb(0, 0, 0);
+        /* background-color: #0e777c; */
+        display: flex;
+        align-items: center;
+        border: 3px solid black ;
+        border-top-left-radius: 45px;
+        border-bottom-right-radius: 45px;
+        margin: 10px;
+        border-top-color: red;
+        border-bottom-color: rgb(0, 0, 0);
+      }
+      
+    </style>
   </head>
   <body>
     <header>
@@ -68,13 +84,15 @@
         </div>
         <div class="header__content">
           <h2>👍 100% Trusted car rental platform in India</h2>
-          <h1>FAST AND EASY WAY TO RENT A CAR</h1>
+          <h1>FAST AND EASY <span style="color: rebeccapurple;">WAY</span> TO <span style="color: red;">RENT A CAR</span></h1>
           <p class="section__description">
             Discover a seamless car rental experience with us. Choose from a
             range of premium vehicles to suit your style and needs, and hit the
             road with confidence. Quick, easy, and reliable - rent your ride
             today!
           </p>
+          
+          
         </div>
       </div>
     </header>
@@ -117,6 +135,12 @@
         </div>
         <button class="btn">Search <i class="ri-search-line"></i></button>
       </form>
+      <marquee class="marquee "behavior="scroll" direction="left" scrollamount="7"  height="50">
+    🚗 Book Your Dream Car Today • 🔥 Limited Cars Available • 💰 Best Rental Prices •
+    ⚡ Quick & Easy Booking • 🎉 Special Offers Available • 📍 Pick Up From Your Location •
+    🏆 Drive More, Pay Less • 🚘 Book Now & Start Your Journey!
+</marquee>
+
     </section>
 
     <section class="section__container about__container" id="about">
