@@ -99,6 +99,10 @@ function getCarImage(carName) {
     if (name.includes('cx-5') || name.includes('cx5')) return '/deals-7.png';
     if (name.includes('cx-30')) return '/deals-8.png';
     if (name.includes('cx-9')) return '/deals-9.png';
+    if (name.includes('bmw')) return '/BMW.jpeg';
+    if (name.includes('deals-6') || name.includes('mazda 6') || name.includes('mazda6')) return '/deals-6.png';
+    if (name.includes('ev') || name.includes('be.05')) return '/mahindraev.png';
+    if (name.includes('thar classic') || name.includes('thar 4x4')) return '/mahindra thar.webp';
     if (name.includes('corolla')) return '/deals-10.png';
     if (name.includes('innova')) return '/deals-11.png';
     if (name.includes('fortuner')) return '/deals-12.png';
