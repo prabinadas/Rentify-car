@@ -1,0 +1,875 @@
+/* =========================================================
+   RENTIFY DAY / NIGHT MODE
+   ========================================================= */
+
+
+/* =========================================================
+   ROOT TRANSITION
+   ========================================================= */
+
+html {
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease;
+}
+
+
+body {
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease;
+}
+
+
+/* =========================================================
+   DAY / NIGHT TOGGLE WRAPPER
+   ========================================================= */
+
+.theme-toggle-wrapper {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  margin-left: 15px;
+
+  flex-shrink: 0;
+
+  z-index: 1000;
+
+}
+
+
+/* =========================================================
+   TOGGLE BUTTON
+   ========================================================= */
+
+.theme-switch {
+
+  position: relative;
+
+  width: 64px;
+
+  height: 32px;
+
+  padding: 0 7px;
+
+  border: none;
+
+  outline: none;
+
+  border-radius: 50px;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  background: linear-gradient(
+    135deg,
+    #ffe259,
+    #ffa751
+  );
+
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.18);
+
+  transition:
+    background 0.5s ease,
+    box-shadow 0.5s ease,
+    transform 0.2s ease;
+
+}
+
+
+/* Click effect */
+
+.theme-switch:active {
+
+  transform: scale(0.94);
+
+}
+
+
+/* =========================================================
+   NIGHT TOGGLE BACKGROUND
+   ========================================================= */
+
+body.night-mode .theme-switch {
+
+  background: linear-gradient(
+    135deg,
+    #020617,
+    #1e3a8a
+  );
+
+  box-shadow:
+    0 5px 18px rgba(0, 0, 0, 0.45);
+
+}
+
+
+/* =========================================================
+   TOGGLE ICON
+   ========================================================= */
+
+.theme-icon {
+
+  position: relative;
+
+  z-index: 3;
+
+  width: 20px;
+
+  height: 20px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 15px;
+
+  transition:
+    opacity 0.3s ease,
+    transform 0.4s ease;
+
+}
+
+
+/* Sun */
+
+.sun-icon {
+
+  color: #ff8a00;
+
+}
+
+
+/* Moon */
+
+.moon-icon {
+
+  color: #ffffff;
+
+}
+
+
+/* =========================================================
+   MOVING CIRCLE
+   ========================================================= */
+
+.toggle-circle {
+
+  position: absolute;
+
+  top: 4px;
+
+  left: 4px;
+
+  width: 24px;
+
+  height: 24px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 3px 8px rgba(0, 0, 0, 0.25);
+
+  z-index: 2;
+
+  transition:
+    transform 0.45s
+    cubic-bezier(0.68, -0.55, 0.27, 1.55);
+
+}
+
+
+/* Move circle to right */
+
+body.night-mode .toggle-circle {
+
+  transform: translateX(32px);
+
+}
+
+
+/* =========================================================
+   ICON ANIMATION
+   ========================================================= */
+
+body.night-mode .sun-icon {
+
+  opacity: 0.35;
+
+  transform: rotate(90deg) scale(0.7);
+
+}
+
+
+body.night-mode .moon-icon {
+
+  opacity: 1;
+
+  transform: rotate(0deg) scale(1);
+
+}
+
+
+/* =========================================================
+   TOGGLE TEXT
+   ========================================================= */
+
+.theme-text {
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  color: #222;
+
+  min-width: 42px;
+
+  transition:
+    color 0.4s ease;
+
+}
+
+
+body.night-mode .theme-text {
+
+  color: #ffffff;
+
+}
+
+
+/* =========================================================
+   HERO CAR CONTAINER
+   ========================================================= */
+
+.header__image {
+
+  position: relative;
+
+  isolation: isolate;
+
+  overflow: hidden;
+
+}
+
+
+/* =========================================================
+   BOTH HERO CARS
+   ========================================================= */
+
+.header__image .hero-car {
+
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: contain;
+
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease,
+    filter 0.7s ease;
+
+}
+
+
+/* =========================================================
+   DAY CAR
+   ========================================================= */
+
+.header__image .car-day {
+
+  position: relative;
+
+  z-index: 2;
+
+  opacity: 1;
+
+  transform: scale(1);
+
+}
+
+
+/* =========================================================
+   NIGHT CAR
+   ========================================================= */
+
+.header__image .car-night {
+
+  position: absolute;
+
+  left: 0;
+
+  top: 0;
+
+  z-index: 1;
+
+  opacity: 0;
+
+  transform: scale(0.96);
+}
+
+
+
+
+/* =========================================================
+   NIGHT MODE — CAR SWITCH
+   ========================================================= */
+
+body.night-mode
+.header__image .car-day {
+
+  opacity: 0;
+
+  transform: scale(0.96);
+
+}
+
+
+body.night-mode
+.header__image .car-night {
+
+  opacity: 1;
+
+  transform: scale(1);
+
+}
+
+
+/* =========================================================
+   NIGHT MODE — MAIN BODY
+   ========================================================= */
+
+body.night-mode {
+
+  background:
+    #050816;
+
+  color:
+    #f8fafc;
+
+}
+
+
+/* =========================================================
+   NIGHT MODE — HEADER
+   ========================================================= */
+
+body.night-mode header {
+
+  background:
+    linear-gradient(
+      135deg,
+      #020617 0%,
+      #071226 50%,
+      #0f172a 100%
+    );
+
+}
+
+
+/* =========================================================
+   NIGHT MODE — HERO
+   ========================================================= */
+
+body.night-mode .header__container {
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(2, 6, 23, 0.95),
+      rgba(15, 23, 42, 0.95)
+    );
+
+}
+
+
+/* =========================================================
+   NIGHT MODE — HERO TEXT
+   ========================================================= */
+
+body.night-mode
+.header__content h2 {
+
+  color:
+    #cbd5e1;
+
+}
+
+
+body.night-mode
+.header__content h1 {
+
+  color:
+    #f8fafc;
+
+}
+
+
+body.night-mode
+.header__content p {
+
+  color:
+    #94a3b8;
+
+}
+
+
+/* =========================================================
+   NIGHT MODE — FORM
+   ========================================================= */
+
+body.night-mode .header__form {
+
+  background:
+    #0f172a;
+
+  box-shadow:
+    0 10px 35px rgba(0, 0, 0, 0.35);
+
+}
+
+
+body.night-mode
+.header__form label {
+
+  color:
+    #cbd5e1;
+
+}
+
+
+body.night-mode
+.header__form input {
+
+  background:
+    #020617;
+
+  color:
+    #f8fafc;
+
+  border-color:
+    #334155;
+
+}
+
+
+body.night-mode
+.header__form input::placeholder {
+
+  color:
+    #64748b;
+
+}
+
+
+/* =========================================================
+   NIGHT MODE — SECTIONS
+   ========================================================= */
+
+body.night-mode
+.deals,
+
+body.night-mode
+.about__container,
+
+body.night-mode
+.client__container {
+
+  background:
+    #050816;
+
+}
+
+
+body.night-mode
+.section__header {
+
+  color:
+    #f8fafc;
+
+}
+
+
+body.night-mode
+.section__description {
+
+  color:
+    #94a3b8;
+
+}
+
+
+/* =========================================================
+   NIGHT MODE — DEAL CARDS
+   ========================================================= */
+
+body.night-mode
+.deals__card {
+
+  background:
+    #0f172a;
+
+  border:
+    1px solid #1e293b;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.25);
+
+}
+
+
+body.night-mode
+.deals__card h4 {
+
+  color:
+    #f8fafc;
+
+}
+
+
+body.night-mode
+.deals__card h3 {
+
+  color:
+    #ffffff;
+
+}
+
+
+/* =========================================================
+   NIGHT MODE — ABOUT CARDS
+   ========================================================= */
+
+body.night-mode
+.about__card {
+
+  background:
+    #0f172a;
+
+  border:
+    1px solid #1e293b;
+
+}
+
+
+body.night-mode
+.about__card h4 {
+
+  color:
+    #f8fafc;
+
+}
+
+
+body.night-mode
+.about__card p {
+
+  color:
+    #94a3b8;
+
+}
+
+
+/* =========================================================
+   NIGHT MODE — WHY CHOOSE
+   ========================================================= */
+
+body.night-mode
+.choose__container {
+
+  background:
+    #07101f;
+
+}
+
+
+body.night-mode
+.choose__content h2 {
+
+  color:
+    #f8fafc;
+
+}
+
+
+body.night-mode
+.choose__content p {
+
+  color:
+    #94a3b8;
+
+}
+
+
+body.night-mode
+.choose__card {
+
+  background:
+    #0f172a;
+
+  border:
+    1px solid #1e293b;
+
+}
+
+
+body.night-mode
+.choose__card h4 {
+
+  color:
+    #f8fafc;
+
+}
+
+
+body.night-mode
+.choose__card p {
+
+  color:
+    #94a3b8;
+
+}
+
+
+/* =========================================================
+   NIGHT MODE — SUBSCRIBE
+   ========================================================= */
+
+body.night-mode
+.subscribe__container {
+
+  background:
+    #0b1220;
+
+}
+
+
+body.night-mode
+.subscribe__content h2 {
+
+  color:
+    #f8fafc;
+
+}
+
+
+body.night-mode
+.subscribe__content p {
+
+  color:
+    #94a3b8;
+
+}
+
+
+body.night-mode
+.subscribe__content input {
+
+  background:
+    #020617;
+
+  color:
+    #ffffff;
+
+  border-color:
+    #334155;
+
+}
+
+
+/* =========================================================
+   NIGHT MODE — TESTIMONIALS
+   ========================================================= */
+
+body.night-mode
+.client__card {
+
+  background:
+    #0f172a;
+
+  border:
+    1px solid #1e293b;
+
+}
+
+
+body.night-mode
+.client__card h4 {
+
+  color:
+    #f8fafc;
+
+}
+
+
+body.night-mode
+.client__card p {
+
+  color:
+    #94a3b8;
+
+}
+
+
+/* =========================================================
+   NIGHT MODE — FOOTER
+   ========================================================= */
+
+body.night-mode
+.footer {
+
+  background:
+    #020617;
+
+}
+
+
+body.night-mode
+.footer p {
+
+  color:
+    #94a3b8;
+
+}
+
+
+body.night-mode
+.footer h4 {
+
+  color:
+    #f8fafc;
+
+}
+
+
+body.night-mode
+.footer__links a {
+
+  color:
+    #94a3b8;
+
+}
+
+
+body.night-mode
+.footer__links a:hover {
+
+  color:
+    #ffffff;
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  .theme-toggle-wrapper {
+
+    margin-left: 0;
+
+    margin-right: 10px;
+
+  }
+
+
+  .theme-switch {
+
+    width: 58px;
+
+    height: 30px;
+
+  }
+
+
+  .toggle-circle {
+
+    width: 22px;
+
+    height: 22px;
+
+  }
+
+
+  body.night-mode
+  .toggle-circle {
+
+    transform: translateX(28px);
+
+  }
+
+
+  .theme-text {
+
+    display: none;
+
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+  .theme-toggle-wrapper {
+
+    position: absolute;
+
+    right: 60px;
+
+    top: 20px;
+
+  }
+
+
+  .theme-switch {
+
+    width: 56px;
+
+    height: 29px;
+
+  }
+
+
+  .toggle-circle {
+
+    width: 21px;
+
+    height: 21px;
+
+    top: 4px;
+
+    left: 4px;
+
+  }
+
+
+  body.night-mode
+  .toggle-circle {
+
+    transform: translateX(27px);
+
+  }
+
+}

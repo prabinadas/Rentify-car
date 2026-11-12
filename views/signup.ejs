@@ -1,95 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
-    <title>Sign Up</title>
-    <!-- <link rel="stylesheet" href="style.css"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create an Account | Rentify</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
     <style>
-    body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  background: #6dd5ed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
 
-.container {
-  background: #f9f9f9;
-  padding: 30px;
-  border-radius: 15px;
-  width: 300px;
-  box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
-}
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 10% 20%, #0f172a 0%, #1e293b 90%);
+            color: #f8fafc;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-}
+        .auth-container {
+            width: 100%;
+            max-width: 450px;
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 36px 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 10;
+        }
 
-input {
-  width: 100%;
-  padding: 10px;
-  margin: 8px 0;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
+        .brand-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
 
-.btn {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  background-color: #2193b0;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-}
+        .brand-logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, #2563eb, #6366f1);
+            border-radius: 16px;
+            color: white;
+            font-size: 26px;
+            margin-bottom: 12px;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.35);
+        }
 
-.btn:hover {
-  background-color: #19748a;
-}
+        .brand-header h1 {
+            font-size: 24px;
+            font-weight: 800;
+            color: #ffffff;
+        }
 
-.signup {
-  background-color: #28a745;
-}
+        .brand-header p {
+            font-size: 13.5px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
 
-.signup:hover {
-  background-color: #218838;
-}
+        .alert-box {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            color: #fca5a5;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-p {
-  text-align: center;
-  margin-top: 15px;
-}
-   </style>
-  </head>
-  <body>
+        .form-group {
+            margin-bottom: 16px;
+        }
 
-    <div class="container">
-      <form action="/users/signup" method="post">
-        <h2>Sign Up</h2>
-        <input type="text" placeholder="Full Name" name="username" required>
-        <input type="email" placeholder="Email" name="email" required>
-         <input type="number" placeholder="Enter phnumber" name="phnumber" required>
-        <input type="password" placeholder="Password" name="password" required>
-       
-        <button type="submit" class="btn signup">Create Account</button>
+        .form-group label {
+            display: block;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-bottom: 6px;
+        }
 
-        <!-- ...existing code... --><!-- ...existing code... -->
-        <% if (typeof message !== 'undefined') { %>
-        <script>
-    alert("<%= message %>");
-  </script>
-        <% } %>
-        <p>Already have an account? <a href="/login">Login</a></p>
-      </form>
-      <!-- ...existing code... -->
+        .input-wrapper {
+            position: relative;
+        }
 
+        .input-wrapper i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 17px;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 11px 14px 11px 42px;
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .input-wrapper input:focus {
+            border-color: #3b82f6;
+            background: rgba(15, 23, 42, 0.85);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 14.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 8px 18px rgba(16, 185, 129, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .btn-submit:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .auth-footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 13.5px;
+            color: #94a3b8;
+        }
+
+        .auth-footer a {
+            color: #60a5fa;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="auth-container">
+    <div class="brand-header">
+        <div class="brand-logo">
+            <i class="ri-steering-2-line"></i>
+        </div>
+        <h1>Create Account</h1>
+        <p>Join Rentify to rent top SUVs and cars with ease</p>
     </div>
-  </body>
+
+    <% if (typeof message !== 'undefined' && message) { %>
+        <div class="alert-box">
+            <i class="ri-alert-line"></i>
+            <span><%= message %></span>
+        </div>
+    <% } %>
+
+    <form action="/users/signup" method="POST">
+        <div class="form-group">
+            <label for="username">Full Name / Username</label>
+            <div class="input-wrapper">
+                <i class="ri-user-line"></i>
+                <input type="text" id="username" name="username" placeholder="e.g. John Doe" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <div class="input-wrapper">
+                <i class="ri-mail-line"></i>
+                <input type="email" id="email" name="email" placeholder="name@example.com" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="phnumber">Phone Number</label>
+            <div class="input-wrapper">
+                <i class="ri-phone-line"></i>
+                <input type="number" id="phnumber" name="phnumber" placeholder="10-digit mobile number" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-wrapper">
+                <i class="ri-lock-password-line"></i>
+                <input type="password" id="password" name="password" placeholder="Create a secure password" required>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-submit">
+            <span>Register Account</span>
+            <i class="ri-arrow-right-line"></i>
+        </button>
+    </form>
+
+    <div class="auth-footer">
+        Already have an account? <a href="/login">Login here</a>
+    </div>
+</div>
+
+</body>
 </html>

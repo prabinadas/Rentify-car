@@ -110,3 +110,49 @@ const swiper = new Swiper(".swiper", {
   loop: true,
 });
 
+// Day / Night Mode Switcher Logic
+function setCarMode(mode) {
+  const carImg = document.getElementById("hero-car-img");
+  const dayBtn = document.getElementById("day-mode-btn");
+  const nightBtn = document.getElementById("night-mode-btn");
+  const navDayBtn = document.getElementById("nav-day-btn");
+  const navNightBtn = document.getElementById("nav-night-btn");
+  const headerImageContainer = document.querySelector(".header__image");
+
+  if (!carImg) return;
+
+  // Smooth animation trigger
+  carImg.style.opacity = "0.2";
+  carImg.style.transform = "scale(0.97)";
+
+  setTimeout(() => {
+    if (mode === "night") {
+      carImg.src = "/scorpio_1.png";
+      carImg.alt = "Scorpio N Night Mode";
+      if (dayBtn) dayBtn.classList.remove("active");
+      if (nightBtn) nightBtn.classList.add("active");
+      if (navDayBtn) navDayBtn.classList.remove("active");
+      if (navNightBtn) navNightBtn.classList.add("active");
+      if (headerImageContainer) headerImageContainer.classList.add("night-mode");
+      localStorage.setItem("carMode", "night");
+    } else {
+      carImg.src = "/scerpion_day.png";
+      carImg.alt = "Scorpio N Day Mode";
+      if (nightBtn) nightBtn.classList.remove("active");
+      if (dayBtn) dayBtn.classList.add("active");
+      if (navNightBtn) navNightBtn.classList.remove("active");
+      if (navDayBtn) navDayBtn.classList.add("active");
+      if (headerImageContainer) headerImageContainer.classList.remove("night-mode");
+      localStorage.setItem("carMode", "day");
+    }
+    carImg.style.opacity = "1";
+    carImg.style.transform = "scale(1)";
+  }, 180);
+}
+
+// Restore saved mode on page load
+document.addEventListener("DOMContentLoaded", () => {
+  const savedMode = localStorage.getItem("carMode") || "day";
+  setCarMode(savedMode);
+});
+

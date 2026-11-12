@@ -1,98 +1,357 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Login</title>
-  <!-- <link rel="stylesheet" href="login.css"> -->
-   <style>
-    body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(to right, #6dd5ed, #2193b0);
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-image: url('BMW.jpeg');
-  /* background-image: url('subscribe.png'); */
-  background-size: cover;
-   background-repeat: no-repeat;
-  background-position: center;
-padding-bottom: 20px;
-}
-.login-container {
- 
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 5px 5px 10px  5px rgba(211, 26, 26, 0.4);
-  width: 300px;
-  text-align: center;
-  background-image: url('scerpion1.png') no-repeat center center/cover;
-  background-size: cover;
-  /* background-position: center; */
- background-repeat: no-repeat;
-   
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Rentify Car Rentals</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
 
-.login-container h2 {
-  margin-bottom: 20px;
-}
-.login-container input {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-.login-container button {
-  width: 100%;
-  padding: 10px;
-  background-color: #9bd7e7;
-  color: white;
-  border: none;
-  border-radius: 60px;
-  font-weight: bold;
-  cursor: pointer;
-}
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 10% 20%, #0f172a 0%, #1e293b 90%);
+            color: #f8fafc;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-.login-container button:hover {
-  background-color: #19748a;
-}
+        body::before {
+            content: '';
+            position: absolute;
+            top: -150px;
+            right: -150px;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.25) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
 
-.login-container p {
-  margin-top: 15px;
-}
+        body::after {
+            content: '';
+            position: absolute;
+            bottom: -150px;
+            left: -150px;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
 
-    
-.forget{
-    margin-top: 9px;
-  
-}
+        .auth-container {
+            width: 100%;
+            max-width: 440px;
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 10;
+        }
 
+        .brand-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
 
-   </style>
+        .brand-logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 58px;
+            height: 58px;
+            background: linear-gradient(135deg, #2563eb, #6366f1);
+            border-radius: 18px;
+            color: white;
+            font-size: 28px;
+            margin-bottom: 14px;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.35);
+        }
+
+        .brand-header h1 {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+        }
+
+        .brand-header p {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-top: 6px;
+        }
+
+        .alert-box {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            color: #fca5a5;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 13.5px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 18px;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 13px 16px 13px 44px;
+            border-radius: 12px;
+            color: white;
+            font-size: 14.5px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .input-wrapper input:focus {
+            border-color: #3b82f6;
+            background: rgba(15, 23, 42, 0.85);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            transform: translateY(-1px);
+            box-shadow: 0 12px 25px rgba(37, 99, 235, 0.4);
+        }
+
+        /* Demo Quick Access */
+        .demo-section {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .demo-title {
+            font-size: 12px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            text-align: center;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .demo-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .demo-pill {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            padding: 9px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .demo-pill:hover {
+            background: rgba(37, 99, 235, 0.2);
+            border-color: #3b82f6;
+            color: white;
+        }
+
+        .demo-pill.admin-demo {
+            border-color: rgba(245, 158, 11, 0.4);
+            color: #fcd34d;
+        }
+
+        .demo-pill.admin-demo:hover {
+            background: rgba(245, 158, 11, 0.2);
+        }
+
+        .auth-footer {
+            margin-top: 22px;
+            text-align: center;
+            font-size: 13.5px;
+            color: #94a3b8;
+        }
+
+        .auth-footer a {
+            color: #60a5fa;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .home-link {
+            display: block;
+            text-align: center;
+            margin-top: 14px;
+            color: #64748b;
+            font-size: 12.5px;
+            text-decoration: none;
+        }
+
+        .home-link:hover {
+            color: #cbd5e1;
+        }
+    </style>
 </head>
 <body>
-  <form action="/users/login" method="post">
-  <div class="login-container">
-    <h2>LOGIN</h2>
-    
-        <!-- <h5>enter your name</h5> -->
-      <input type="text" placeholder="Username" name="username" required>
-      <!-- <h5>enter your password</h5> -->
-      <input type="password" placeholder="Password" name="password" required>
-      <button type="submit" class="forget">Login</button>
-      <button type="submit" class="forget"> <a href="forget.html"></a>Forget password</a></button>
-      <!-- <button></button> -->
-      
-  </form>
-  <% if (typeof message !== 'undefined' && message) { %>
-      <script>
-        alert("<%= message %>");
-      </script>
+
+<div class="auth-container">
+    <div class="brand-header">
+        <div class="brand-logo">
+            <i class="ri-steering-2-line"></i>
+        </div>
+        <h1>Welcome Back</h1>
+        <p>Sign in to manage bookings or access admin panel</p>
+    </div>
+
+    <% if (typeof message !== 'undefined' && message) { %>
+        <div class="alert-box">
+            <i class="ri-information-line"></i>
+            <span><%= message %></span>
+        </div>
     <% } %>
-    <p>Don't have an account? <a href="/signup">Sign up</a></p>
-  </div>
+
+    <form action="/users/login" method="POST" id="loginForm">
+        <div class="form-group">
+            <label for="username">Username or Email</label>
+            <div class="input-wrapper">
+                <i class="ri-user-line"></i>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    placeholder="e.g. adminrentify or user email" 
+                    required 
+                    autocomplete="username"
+                >
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-wrapper">
+                <i class="ri-lock-password-line"></i>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    placeholder="Enter your password" 
+                    required 
+                    autocomplete="current-password"
+                >
+            </div>
+        </div>
+
+        <button type="submit" class="btn-submit">
+            <span>Sign In</span>
+            <i class="ri-arrow-right-line"></i>
+        </button>
+    </form>
+
+    <!-- Quick Demo Credentials for Interview & Testing -->
+    <div class="demo-section">
+        <div class="demo-title">⚡ Quick Autofill for Interview</div>
+        <div class="demo-buttons">
+            <button type="button" class="demo-pill admin-demo" onclick="fillAdmin()">
+                <i class="ri-shield-user-line"></i>
+                Admin Demo
+            </button>
+            <button type="button" class="demo-pill" onclick="fillUser()">
+                <i class="ri-user-smile-line"></i>
+                User Demo
+            </button>
+        </div>
+    </div>
+
+    <div class="auth-footer">
+        Don't have an account? <a href="/signup">Sign up here</a>
+    </div>
+
+    <a href="/gudu" class="home-link">
+        <i class="ri-arrow-left-line"></i> Back to Rentify Cars
+    </a>
+</div>
+
+<script>
+    function fillAdmin() {
+        document.getElementById('username').value = 'adminrentify';
+        document.getElementById('password').value = 'rentifycar';
+    }
+
+    function fillUser() {
+        document.getElementById('username').value = 'dmps';
+        document.getElementById('password').value = 'dmps';
+    }
+</script>
+
 </body>
 </html>
